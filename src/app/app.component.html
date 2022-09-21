@@ -1,0 +1,50 @@
+<!--<div class="card">
+  <h5>Vertical</h5>
+  <p-chart width="600px" height="400px" type="bar" [data]="basicData" [options]="basicOptions"></p-chart>
+</div>
+asdasd-->
+
+
+<div class="row">
+  <div class="col ms-3 mt-3">
+    <div class="form-check">
+      <input class="form-check-input" type="radio" value="" name="projectOrGroup" id="project" [checked]="true"
+        (click)="changeRadioForProject()">
+      <label class="form-check-label" for="project"> Projects</label>
+
+
+    </div>
+    
+    <div class="form-check">
+      <input class="form-check-input" type="radio" value="" name="projectOrGroup" id="group"
+        (click)="changeRadioForGroup()">
+      <label class="form-check-label" for="group"> Group</label>
+    </div>
+  </div>
+
+  <div *ngIf="projectOrGroup" class="">
+    <div class="col-md-1 mt-3 ms-3">
+      <label for="projectId" class="form-label">Project ID</label>
+      <input  type="text" class="form-control col" id="projectId" placeholder="Enter Project ID" #projectId>
+
+    </div>
+    <button class="btn btn-primary ms-3 mt-2" (click)="getProjectDetails(projectId.value)">Get Project Details</button>
+
+    3313984
+
+    7153509
+  </div>
+
+  <div *ngIf="!projectOrGroup">
+    <label for="groupId" class="form-label">Group ID</label>
+    <input type="text" class="form-control" id="groupId" placeholder="Enter Group ID" #groupId>
+  </div>
+
+</div>
+
+<div class="card mt-5 ms-5" style="width: 300px; max-height: 500px; overflow-y: scroll ;" *ngIf="showCommitters" >
+  <div class="card-header">Committers</div>
+  <ul class="list-group list-group-flush" *ngFor="let item of committers">
+    <li class="mt-2 list-group-item"><input type="checkbox" class="form-check-input" id="{{item}}"  (change)="deneme(item)"><label class="ms-2" for="{{item}}">{{item}}</label></li>
+  </ul>
+</div>
