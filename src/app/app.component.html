@@ -14,18 +14,25 @@ asdasd-->
 
 
     </div>
-    
+
     <div class="form-check">
       <input class="form-check-input" type="radio" value="" name="projectOrGroup" id="group"
         (click)="changeRadioForGroup()">
       <label class="form-check-label" for="group"> Group</label>
     </div>
-  </div>
 
+
+  </div>
+  <div class="col"></div>
+  <div class="col"></div>
+  <div class="col-md-4 me-5" style="width: 600px; height: 50px;">
+    <p-messages></p-messages>
+  </div>
+  <br>
   <div *ngIf="projectOrGroup" class="">
     <div class="col-md-1 mt-3 ms-3">
       <label for="projectId" class="form-label">Project ID</label>
-      <input  type="text" class="form-control col" id="projectId" placeholder="Enter Project ID" #projectId>
+      <input type="number" class="form-control col" id="projectId" placeholder="Enter Project ID" #projectId>
 
     </div>
     <button class="btn btn-primary ms-3 mt-2" (click)="getProjectDetails(projectId.value)">Get Project Details</button>
@@ -35,16 +42,60 @@ asdasd-->
     7153509
   </div>
 
-  <div *ngIf="!projectOrGroup">
+  <div *ngIf="!projectOrGroup" class="row">
     <label for="groupId" class="form-label">Group ID</label>
     <input type="text" class="form-control" id="groupId" placeholder="Enter Group ID" #groupId>
   </div>
 
-</div>
 
-<div class="card mt-5 ms-5" style="width: 300px; max-height: 500px; overflow-y: scroll ;" *ngIf="showCommitters" >
-  <div class="card-header">Committers</div>
-  <ul class="list-group list-group-flush" *ngFor="let item of committers">
-    <li class="mt-2 list-group-item"><input type="checkbox" class="form-check-input" id="{{item}}"  (change)="deneme(item)"><label class="ms-2" for="{{item}}">{{item}}</label></li>
-  </ul>
+</div>
+<div *ngIf="showCommitters" class="container-fluid">
+  <div class="row">
+
+    <div class=" mt-5 col-md-3 ms-4" style=" height: 500px; background-color: rgb(224, 222, 217);">
+      <p-scrollPanel [style]="{width: '100%', height: '500px'}">
+        <div class="card-header" style="font-weight: bold ;">Committers</div>
+        <ul class="list-group list-group-flush mt-1 rounded" *ngFor="let item of committers">
+          <li class="mt-2 list-group-item"><input type="checkbox" class="form-check-input" id="{{item}}"
+              (change)="changeSelectedCommitters(item)"><label class="ms-2" for="{{item}}">{{item}}</label></li>
+        </ul>
+
+      </p-scrollPanel>
+
+    </div>
+
+    <div class="col-md-6 mt-5 ms-5 form-check">
+      <input type="radio" class="form-check-input" id="date" [checked]="true" (click)="changeWithDate()"
+        name="withDate">
+      <label for="date" class="ms-2 form-check-label">With Date</label>
+      <br>
+      <input type="radio" class="form-check-input" id="withoutDate" (click)="changeWithoutDate()" name="withDate">
+      <label for="withoutDate" class="ms-2 form-check-label">Without Date</label>
+
+      <div *ngIf="withDate" class="mt-4">
+        <form>
+          <div class="mt-2">
+            <label for="startDate">Start Date</label>
+            <input class="ms-2" type="date"  id="startDate" #startDatee
+              (change)="changedStartDate(startDatee.value)">
+          </div>
+          <br>
+          <div class="mt-2">
+            <label for="endDate">End Date</label>
+            <input class="ms-3" type="date" id="endDate" #endDate (change)="changedEndDate(endDate.value)"
+              [defaultValue]="2022.01.01">
+          </div>
+        </form>
+      </div>
+    </div>
+
+
+  </div>
+  <button class="btn btn-primary" (click)="createChart()">Create Chart</button>
+
+  <div class="card">
+    <h5>Vertical</h5>
+    <p-chart width="600px" height="400px" type="bar" [data]="basicData" [options]="basicOptions"></p-chart>
+  </div>
+
 </div>

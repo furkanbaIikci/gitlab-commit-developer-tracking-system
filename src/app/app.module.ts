@@ -11,8 +11,12 @@ import {AccordionModule} from 'primeng/accordion';     //accordion and accordion
 import {MenuItem} from 'primeng/api';                  //api
 import {ChartModule} from 'primeng/chart';
 import {RadioButtonModule} from 'primeng/radiobutton';
-import { ProjectServices } from 'src/Services/ProjectServices';
-
+import { CommittersServices } from 'src/Services/CommittersServices';
+import {ScrollPanelModule} from 'primeng/scrollpanel';
+import {MessagesModule} from 'primeng/messages';
+import {MessageModule} from 'primeng/message';
+import { Animations } from 'chart.js';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
 
 
 
@@ -27,8 +31,13 @@ import { ProjectServices } from 'src/Services/ProjectServices';
     AccordionModule,
     ChartModule,
     RadioButtonModule,
-    ProjectServices
-
+    CommittersServices,
+    ScrollPanelModule,
+    MessageModule,
+    MessagesModule,
+    BrowserAnimationsModule
+    
+    
   ],
   providers: [],
   bootstrap: [AppComponent]
