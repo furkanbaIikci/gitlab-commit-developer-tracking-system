@@ -5,18 +5,23 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 
+import { CommittersServices } from 'src/Services/CommittersServices';
+import { GroupProject } from './GroupsProjects';
 
 
 import {AccordionModule} from 'primeng/accordion';     //accordion and accordion tab
 import {MenuItem} from 'primeng/api';                  //api
 import {ChartModule} from 'primeng/chart';
 import {RadioButtonModule} from 'primeng/radiobutton';
-import { CommittersServices } from 'src/Services/CommittersServices';
 import {ScrollPanelModule} from 'primeng/scrollpanel';
 import {MessagesModule} from 'primeng/messages';
 import {MessageModule} from 'primeng/message';
 import { Animations } from 'chart.js';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
+import { GroupProjectServices } from 'src/Services/GroupProjectServices';
+import {BreadcrumbModule} from 'primeng/breadcrumb';
+import {PaginatorModule} from 'primeng/paginator';
+
 
 
 
@@ -35,7 +40,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     ScrollPanelModule,
     MessageModule,
     MessagesModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    GroupProjectServices,
+    BreadcrumbModule,
+    PaginatorModule
     
     
   ],

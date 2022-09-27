@@ -29,73 +29,189 @@ asdasd-->
     <p-messages></p-messages>
   </div>
   <br>
-  <div *ngIf="projectOrGroup" class="">
-    <div class="col-md-1 mt-3 ms-3">
+  <div *ngIf="projectOrGroup" class="row">
+
+    <div class="col-md-1 mt-3 ms-3" style="width: 10%;">
       <label for="projectId" class="form-label">Project ID</label>
       <input type="number" class="form-control col" id="projectId" placeholder="Enter Project ID" #projectId>
 
     </div>
-    <button class="btn btn-primary ms-3 mt-2" (click)="getProjectDetails(projectId.value)">Get Project Details</button>
-
+    <div>
+      <button class="btn btn-primary ms-3 mt-2" (click)="getProjectDetails(projectId.value)">Get Project
+        Details</button>
+    </div>
     3313984
 
     7153509
+    <div *ngIf="showCommitters" class="container-fluid">
+      <div class="row">
+
+        <div class=" mt-5 col-md-3 ms-4" style=" height: 500px; background-color: rgb(224, 222, 217);">
+          <p-scrollPanel [style]="{width: '100%', height: '500px'}">
+            <div class="card-header" style="font-weight: bold ;">Committers</div>
+            <ul class="list-group list-group-flush mt-1 rounded" *ngFor="let item of committers">
+              <li class="mt-2 list-group-item"><input type="checkbox" class="form-check-input" id="{{item}}"
+                  (change)="changeSelectedCommitters(item)"><label class="ms-2" for="{{item}}">{{item}}</label></li>
+            </ul>
+
+          </p-scrollPanel>
+
+        </div>
+
+        <div class="col-md-6 mt-5 ms-5 form-check">
+          <input type="radio" class="form-check-input" id="date" [checked]="true" (click)="changeWithDate()"
+            name="withDate">
+          <label for="date" class="ms-2 form-check-label">With Date</label>
+          <br>
+          <input type="radio" class="form-check-input" id="withoutDate" (click)="changeWithoutDate()" name="withDate">
+          <label for="withoutDate" class="ms-2 form-check-label">Without Date</label>
+
+          <div *ngIf="withDate" class="mt-4">
+            <form>
+              <div class="mt-2">
+                <label for="startDate">Start Date</label>
+                <input class="ms-2" type="date" id="startDate" #startDatee
+                  (change)="changedStartDate(startDatee.value)">
+              </div>
+              <br>
+              <div class="mt-2">
+                <label for="endDate">End Date</label>
+                <input class="ms-3" type="date" id="endDate" #endDate (change)="changedEndDate(endDate.value)">
+              </div>
+            </form>
+          </div>
+        </div>
+
+
+      </div>
+      <button class="btn btn-primary" (click)="createChart()">Create Chart</button>
+
+      <div *ngIf="showChartBool" class="card row">
+        <div class="col">
+
+
+          <p-chart width="600px" height="400px" type="bar" [data]="basicData" [options]="basicOptions"></p-chart>
+        </div>
+      </div>
+
+    </div>
   </div>
 
   <div *ngIf="!projectOrGroup" class="row">
-    <label for="groupId" class="form-label">Group ID</label>
-    <input type="text" class="form-control" id="groupId" placeholder="Enter Group ID" #groupId>
-  </div>
+    <div class="col-md-1 mt-3 ms-3" style="width: 10%;">
+      <label for="groupId" class="form-label">Group ID</label>
+      <input type="number" class="form-control col" id="groupId" placeholder="Enter Group ID" #groupId>
+    </div>
+    4974731
 
+    6443980
+    <div>
 
-</div>
-<div *ngIf="showCommitters" class="container-fluid">
-  <div class="row">
+      <button class="btn btn-primary  ms-3 mt-2" id="getGroupProjects" (click)="getGroupProject(groupId.value)">Get
+        Group Projects</button>
 
-    <div class=" mt-5 col-md-3 ms-4" style=" height: 500px; background-color: rgb(224, 222, 217);">
-      <p-scrollPanel [style]="{width: '100%', height: '500px'}">
-        <div class="card-header" style="font-weight: bold ;">Committers</div>
-        <ul class="list-group list-group-flush mt-1 rounded" *ngFor="let item of committers">
-          <li class="mt-2 list-group-item"><input type="checkbox" class="form-check-input" id="{{item}}"
-              (change)="changeSelectedCommitters(item)"><label class="ms-2" for="{{item}}">{{item}}</label></li>
-        </ul>
-
-      </p-scrollPanel>
 
     </div>
+    <div class="container-fluid" *ngIf="showGroupProjects">
+      <div class="row">
+        <div class=" mt-5 col-md-3 ms-4" style=" height: 500px; background-color: rgb(224, 222, 217);">
+          <p-scrollPanel [style]="{width: '100%', height: '500px'}">
+            
 
-    <div class="col-md-6 mt-5 ms-5 form-check">
-      <input type="radio" class="form-check-input" id="date" [checked]="true" (click)="changeWithDate()"
-        name="withDate">
-      <label for="date" class="ms-2 form-check-label">With Date</label>
-      <br>
-      <input type="radio" class="form-check-input" id="withoutDate" (click)="changeWithoutDate()" name="withDate">
-      <label for="withoutDate" class="ms-2 form-check-label">Without Date</label>
+              <div class="card-header" style="font-weight: bold ;">Subgroups</div>
+            
 
-      <div *ngIf="withDate" class="mt-4">
-        <form>
-          <div class="mt-2">
-            <label for="startDate">Start Date</label>
-            <input class="ms-2" type="date"  id="startDate" #startDatee
-              (change)="changedStartDate(startDatee.value)">
-          </div>
-          <br>
-          <div class="mt-2">
-            <label for="endDate">End Date</label>
-            <input class="ms-3" type="date" id="endDate" #endDate (change)="changedEndDate(endDate.value)"
-              [defaultValue]="2022.01.01">
-          </div>
-        </form>
+            <ul class="list-group list-group-flush mt-1 rounded" *ngFor="let item of subgroups  ">
+              <li class="mt-2 list-group-item"><input type="radio" class="form-check-input" name="group"
+                  id="{{item.name}}" (change)="getSubgroups(item.id)"><label class="ms-2"
+                  for="{{item.name}}">{{item.name}}</label>
+              </li>
+            </ul>
+
+          </p-scrollPanel>
+        </div>
+
+        <div class=" mt-5 col-md-3 ms-4" style=" height: 500px; background-color: rgb(224, 222, 217);">
+          <p-scrollPanel [style]="{width: '100%', height: '500px'}">
+
+            <div class="card-header" style="font-weight: bold ;">Projects</div>
+            <ul class="list-group list-group-flush mt-1 rounded" *ngFor="let item of groupProjects">
+              <li class="mt-2 list-group-item"><input type="checkbox" class="form-check-input" name="group"
+                  id="{{item.name}}" (change)="changeSelectedGroups(item.id)"><label class="ms-2"
+                  for="{{item.name}}">{{item.name}}</label>
+              </li>
+            </ul>
+          </p-scrollPanel>
+        </div>
+
+
+        <div *ngIf="showProjectForGroup" class=" mt-5 col-md-3 ms-4"
+          style=" height: 500px; background-color: rgb(224, 222, 217);">
+          <p-scrollPanel [style]="{width: '100%', height: '500px'}">
+            <div class="card-header" style="font-weight: bold ;">Committers</div>
+            <ul class="list-group list-group-flush mt-1 rounded" *ngFor="let item of committers">
+              <li class="mt-2 list-group-item"><input type="checkbox" class="form-check-input" id="{{item}}"
+                  (change)="changeSelectedCommitters(item)"><label class="ms-2" for="{{item}}">{{item}}</label></li>
+            </ul>
+          </p-scrollPanel>
+
+        </div>
+        
       </div>
+      
+      <div class="row">
+        <div class=" col-md-3 ms-4">
+          <p-paginator [rows]="20" [showFirstLastIcon]="false" [showPageLinks]="false" [showJumpToPageDropdown]="true"
+            [totalRecords]="subgroupsGroupsLength"
+          (onPageChange)="changedSubgroupPage($event.page+1)">
+        </p-paginator>
+        </div>
+        <div class=" col-md-3 ms-4">
+          <p-paginator [rows]="20" [showFirstLastIcon]="false" [showPageLinks]="false" [showJumpToPageDropdown]="true"  [totalRecords]="groupProjectLength"
+          (onPageChange)="changedGroupPage($event.page+1)">
+        </p-paginator>
+        </div>
+        
+      </div>
+
+
+      <nav aria-label="breadcrumb" style="background-color: white;">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item" *ngFor="let item of subgroupsBreadcrumb"><a (click)="denemee(item)"
+              style="font-weight: bold;"> {{item}}</a></li>
+        </ol>
+      </nav>
+
     </div>
 
 
-  </div>
-  <button class="btn btn-primary" (click)="createChart()">Create Chart</button>
 
-  <div class="card">
-    <h5>Vertical</h5>
-    <p-chart width="600px" height="400px" type="bar" [data]="basicData" [options]="basicOptions"></p-chart>
+
   </div>
+
 
 </div>
+
+
+<!--
+
+
+
+<h5>Multiple</h5>
+<p-accordion [multiple]="true">
+    <p-accordionTab header="Header I">
+      <p-accordionTab header="Header 2">
+      </p-accordionTab>
+    </p-accordionTab>
+    <p-accordionTab header="Header II">
+        <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi
+            architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione
+            voluptatem sequi nesciunt. Consectetur, adipisci velit, sed quia non numquam eius modi.</p>
+    </p-accordionTab>
+    <p-accordionTab header="Header III">
+        <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati
+            cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio.
+            Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus.</p>
+    </p-accordionTab>
+</p-accordion>
+-->
