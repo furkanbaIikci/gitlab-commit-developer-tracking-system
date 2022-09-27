@@ -28,6 +28,7 @@ export class AppComponent {
   showGroupProjects: Boolean = false;
   showProjectForGroup: Boolean = false;
   selectedCommitters = new Set<any>();
+  selectedProjects = new Set<any>();
 
   justOneTime: boolean = true;
 
@@ -61,6 +62,7 @@ export class AppComponent {
   items!: MenuItem[];
   subgroupsBreadcrumb!: Set<Number>;
   subgroupsNames!: String;
+
 
   constructor(
     private committersService: CommittersServices,
@@ -97,7 +99,7 @@ export class AppComponent {
         this.messageService.clear();
       }, 1500);
     } else {
-      this.projectName = await this.committersService.getCommittersName(
+      this.projectName = await this.committersService.getProjectsName(
         projectId
       );
       await this.delete();
@@ -106,6 +108,7 @@ export class AppComponent {
       );
 
       this.project.forEach((element) => {
+        
         this.committers.add(element.committer_name);
       });
       if (this.committers.size != 0) {
@@ -114,50 +117,42 @@ export class AppComponent {
     }
   }
 
-  async getCommitters(groupId:any){
-    this.groupsPage=1;
-    console.log("caliisoyr");
-    
-    while(true){
+  async getCommitters(groupId: any) {
+    this.groupsPage = 1;
+    console.log('caliisoyr');
+
+    while (true) {
       this.groupProjects = await this.groupProjectService.getGroups(
         groupId,
         this.groupsPage,
         100
       );
 
-      this.groupProjects.forEach(async element => {
-        console.log("group porject element " , element.id);
-        
+      this.groupProjects.forEach(async (element) => {
+        console.log('group porject element ', element.id);
+
         this.project = await this.committersService.getCommittersDetails(
           element.id
         );
         console.log(this.project);
-        
-        this.project.forEach(element => {
+
+        this.project.forEach((element) => {
           this.committers.add(element.committer_name);
-          
         });
         console.log(this.committers.size);
-
       });
 
-      
-      
-      if(this.groupProjects.length%100==0 && this.groupProjects.length !=0){
+      if (
+        this.groupProjects.length % 100 == 0 &&
+        this.groupProjects.length != 0
+      ) {
         this.groupsPage++;
-      }else{
+      } else {
         this.showCommitters = true;
 
         break;
       }
-      
     }
-    
-      
-    
-    
-
-    
   }
 
   async delete() {
@@ -286,13 +281,18 @@ export class AppComponent {
     this.showChartBool = true;
   }
 
-  async getGroupProject(groupId: any) {
+  async getGroupProject(groupId: any, e?:any) {
     this.subgroups = [];
     this.groupProjects = [];
     this.subgroupsPage = 1;
     this.groupsPage = 1;
     this.subgroupsGroupsLength = 0;
     this.groupProjectLength = 0;
+    this.committers.clear();
+    
+    if(e!=null){
+      this.subgroupsBreadcrumb.clear();
+    }
 
     if (groupId == '') {
       this.messageService.add({
@@ -308,6 +308,13 @@ export class AppComponent {
       this.subgroupsBreadcrumb.add(groupId);
       this.globalGroupId = groupId;
 
+      let projectsId = await this.groupProjectService.getGroups(groupId,1,10000);
+      projectsId.forEach(async element => {
+        let temp = await this.committersService.getCommittersDetails(element.id);
+        temp.forEach(element => {
+          this.committers.add(element.committer_name);
+        });
+      });
       try {
         while (true) {
           this.subgroups = await this.groupProjectService.getSubGroups(
@@ -358,8 +365,7 @@ export class AppComponent {
           1,
           20
         );
-
-        this.getCommitters(groupId);
+          this.showProjectForGroup = true;
       } catch (error) {
         this.showGroupProjects = false;
         this.subgroupsBreadcrumb.clear();
@@ -368,7 +374,7 @@ export class AppComponent {
           summary: 'Unexpected Error',
           detail: 'Please try again',
         });
-        
+
         setTimeout(() => {
           this.messageService.clear();
         }, 1500);
@@ -376,9 +382,12 @@ export class AppComponent {
     }
   }
 
-  async changeSelectedGroups(e: any) {
-    await this.getProjectDetails(e);
-    this.showProjectForGroup = true;
+  async changeSelectedProjects(e: any) {
+    if (!this.selectedProjects.has(e)) {
+      this.selectedProjects.add(e);
+    } else {
+      this.selectedProjects.delete(e);
+    }    
   }
 
   async getSubgroups(groupId: any) {

@@ -11,7 +11,7 @@ export class CommittersServices{
     constructor(private http:HttpClient){}
 
 
-    async getCommittersName(projectId:any):Promise<String>{
+    async getProjectsName(projectId:any):Promise<String>{
         await this.http.get<Project>("https://gitlab.com/api/v4/projects/" + projectId +"/").toPromise().then((data)=>{
             if(data?.name!=null){
                 this.projectName =  data.name;
@@ -24,10 +24,10 @@ export class CommittersServices{
      async getCommittersDetails(projectId:any):Promise<Committers[]>{
         this.projects= [];
          await this.http.get<Committers[]>("https://gitlab.com/api/v4/projects/" + projectId +"/repository/commits/?per_page=100000").toPromise().then((data)=>{
-            data?.forEach(element => {
-                this.projects.push(element);
-                
-            });
+            
+         if(data!=null){
+            this.projects = data;
+         }
         })
         return this.projects;
     }
