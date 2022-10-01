@@ -18,9 +18,10 @@ import { Subgroups } from './Subgroups';
 export class AppComponent {
   title = 'GitlabAPI';
 
-  basicData: any;
+  basicData!: any ;
+  chartData!:any[];
 
-  basicOptions: any;
+  basicOptions!: any;
 
   project!: Committers[];
   committers!: Set<String>;
@@ -29,6 +30,7 @@ export class AppComponent {
   showProjectForGroup: Boolean = false;
   selectedCommitters = new Set<any>();
   selectedProjects = new Set<any>();
+  selectedProjectsId = new Set<any>();
 
   justOneTime: boolean = true;
 
@@ -40,7 +42,7 @@ export class AppComponent {
   projectName!: String;
 
   projectOrGroup: boolean = true;
-  withDate: boolean = true;
+  withDate: boolean = false;
 
   startDate!: Date;
   endDate!: Date;
@@ -71,6 +73,8 @@ export class AppComponent {
   ) {}
 
   ngOnInit() {
+    
+    this.chartData = [];
     this.startDate = new Date();
     this.endDate = new Date();
 
@@ -211,16 +215,36 @@ export class AppComponent {
         }, 1500);
       }
     }
+
+    if(!this.projectOrGroup){
+      
+    
+    this.selectedProjectsId.forEach(async element => {
+      
+      await this.createChartData(element);
+    await this.drawChart(element);
+    });
+  }else{
+    console.log("project", this.project);
+    
     await this.createChartData();
     await this.drawChart();
   }
+  }
 
-  async createChartData() {
+  async createChartData(data?:any) {
     this.committersCount.clear();
     let count = 0;
+    
+    if(!this.projectOrGroup){
+      this.project = await this.committersService.getCommittersDetails(data);
+
+    }
     this.selectedCommitters.forEach((element) => {
       count = 0;
+      
       this.project.forEach((elementCommitters) => {
+        
         if (elementCommitters.committer_name === element) {
           count++;
         }
@@ -229,7 +253,7 @@ export class AppComponent {
     });
   }
 
-  async drawChart() {
+  async drawChart(projectId?:any) {
     let labelData = Array.from(this.committersCount.keys());
     let datasetsData = Array.from(this.committersCount.values());
 
@@ -239,6 +263,11 @@ export class AppComponent {
       color = Math.floor(Math.random() * 16777216).toString(16);
       backgroundColor.push('#000000'.slice(0, -color.length) + color);
     });
+
+    if(!this.projectOrGroup){
+      this.projectName = await this.committersService.getProjectsName(projectId);
+
+    }
 
     this.basicData = {
       labels: labelData,
@@ -250,7 +279,11 @@ export class AppComponent {
         },
       ],
     };
-
+    console.log(this.basicData);
+    
+    this.chartData.push(this.basicData);
+    console.log("data",this.chartData);
+    
     this.basicOptions = {
       plugins: {
         legend: {
@@ -382,11 +415,14 @@ export class AppComponent {
     }
   }
 
-  async changeSelectedProjects(e: any) {
+  async changeSelectedProjects(e: any,id:any) {
     if (!this.selectedProjects.has(e)) {
       this.selectedProjects.add(e);
+      this.selectedProjectsId.add(id);
     } else {
       this.selectedProjects.delete(e);
+      this.selectedProjectsId.delete(id);
+
     }    
   }
 
