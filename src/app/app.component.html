@@ -3,47 +3,71 @@
   <p-chart width="600px" height="400px" type="bar" [data]="basicData" [options]="basicOptions"></p-chart>
 </div>
 asdasd-->
-
-
 <div class="row">
-  <div class="col ms-3 mt-3">
-    <div class="form-check">
-      <input class="form-check-input" type="radio" value="" name="projectOrGroup" id="project" [checked]="true"
-        (click)="changeRadioForProject()">
-      <label class="form-check-label" for="project"> Projects</label>
+  <p-toast position="top-right" ></p-toast>
+
+  <div class="row mt-5"></div>
+  
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-4"></div>
+      <div class="col-md-4">
+        <div class="row">
+          <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+            <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" value=""
+              (click)="changeRadioForProject()" checked>
+            <label class="btn btn-outline-dark" for="btnradio1"><i class="bi bi-file-code"></i>
+              Projects</label>
+
+            <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off"
+              (click)="changeRadioForGroup()">
+            <label class="btn btn-outline-dark" for="btnradio2"><i class="bi bi-diagram-3"></i>
+              Groups</label>
+          </div>
+
+        </div>
+
+        <div class="row mt-2" *ngIf="projectOrGroup">
+          <div class="card text-center text-bg-light" style="height: 200px;">
+            <div class="mt-3">
+
+              <input type="number" class="form-control mt-2" id="projectId" placeholder="Enter Project ID"
+                style="min-width: 100px;" #projectId>
+
+            </div>
+            <div>
+              <button class="btn btn-dark ms-3 mt-2" (click)="getProjectDetails(projectId.value)">Get Project
+                Details</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-2" *ngIf="!projectOrGroup">
+          <div class="card text-center text-bg-light" style="height: 200px;">
+
+          <div class="mt-3">
+            <input type="number" class="form-control mt-2" id="groupId" placeholder="Enter Group ID"
+              style="min-width: 100px;" #groupId>
+          </div>
+
+          <div>
+
+            <button class="btn btn-dark ms-3 mt-2" id="getGroupProjects"
+              (click)="getGroupProject(groupId.value,1)">Get
+              Group Projects</button>
 
 
+          </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4"></div>
     </div>
-
-    <div class="form-check">
-      <input class="form-check-input" type="radio" value="" name="projectOrGroup" id="group"
-        (click)="changeRadioForGroup()">
-      <label class="form-check-label" for="group"> Group</label>
-    </div>
-
-
   </div>
-  <div class="col"></div>
-  <div class="col"></div>
-  <div class="col-md-4 me-5" style="width: 600px; height: 50px;">
-    <p-messages></p-messages>
-  </div>
-  <br>
+
+
   <div *ngIf="projectOrGroup" class="row">
 
-    <div class="col-md-1 mt-3 ms-3" style="width: 10%;">
-      <label for="projectId" class="form-label">Project ID</label>
-      <input type="number" class="form-control col" id="projectId" placeholder="Enter Project ID"
-        style="min-width: 100px;" #projectId>
-
-    </div>
-    <div>
-      <button class="btn btn-primary ms-3 mt-2" (click)="getProjectDetails(projectId.value)">Get Project
-        Details</button>
-    </div>
-    3313984
-
-    7153509
     <div *ngIf="showCommitters" class="container-fluid">
       <div class="row">
 
@@ -60,11 +84,11 @@ asdasd-->
         </div>
 
         <div class="col-md-6 mt-5 ms-5 form-check">
-          <input type="radio" class="form-check-input" id="date"  (click)="changeWithDate()"
-            name="withDate">
+          <input type="radio" class="form-check-input" id="date" (click)="changeWithDate()" name="withDate">
           <label for="date" class="ms-2 form-check-label">With Date</label>
           <br>
-          <input type="radio" class="form-check-input" id="withoutDate" [checked]="true" (click)="changeWithoutDate()" name="withDate">
+          <input type="radio" class="form-check-input" id="withoutDate" [checked]="true" (click)="changeWithoutDate()"
+            name="withDate">
           <label for="withoutDate" class="ms-2 form-check-label">Without Date</label>
 
           <div *ngIf="withDate" class="mt-4">
@@ -99,42 +123,19 @@ asdasd-->
   </div>
 
   <div *ngIf="!projectOrGroup" class="row">
-    <div class="col-md-1 mt-3 ms-3" style="width: 10%;">
-      <label for="groupId" class="form-label">Group ID</label>
-      <input type="number" class="form-control col" id="groupId" placeholder="Enter Group ID" style="min-width: 100px;"
-        #groupId>
-    </div>
-    4974731
-    <br>
-    6443980
-    <div>
-
-      <button class="btn btn-primary  ms-3 mt-2" id="getGroupProjects" (click)="getGroupProject(groupId.value,1)">Get
-        Group Projects</button>
-
-
-    </div>
+    
     <div class="container-fluid" *ngIf="showGroupProjects">
 
       <div class="row">
-        <nav aria-label="breadcrumb" class="mt-2"
+        <div class="mt-2 fs-4" style="font-size: bold;">Subgroup Directory</div>
+        <nav aria-label="breadcrumb" class=""
           style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);">
           <ol class="breadcrumb">
             <li class="breadcrumb-item mt-3" *ngFor="let item of subgroupsBreadcrumb">
               <!-- HTML !-->
-        <button class="button-2" role="button" (click)="denemee(item)">{{item}}</button>
+              <button class="button-2" role="button" style="background-color: white;" (click)="denemee(item)">{{item}}</button>
             </li>
 
-
-          </ol>
-        </nav>
-
-        <nav
-          style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);"
-          aria-label="breadcrumb">
-          <ol class="breadcrumb">
-            <li class="breadcrumb-item" *ngFor="let item of subgroupsBreadcrumb"><button class="button-2" role="button" (click)="denemee(item)">{{item}}</button>
-            </li>
 
           </ol>
         </nav>
@@ -183,14 +184,14 @@ asdasd-->
 
         </div>
 
-        <div  class="mt-5 col-md-2 ms-4" style="max-width: 200px;">
+        <div class="mt-5 col-md-2 ms-4" style="max-width: 200px;">
           <h2>Selected Projects </h2>
           <div *ngFor="let item of selectedProjects">
             {{item}}
           </div>
         </div>
 
-        <div  class="mt-5 col-md-2 ms-4" style="max-width: 200px;">
+        <div class="mt-5 col-md-2 ms-4" style="max-width: 200px;">
           <h2>Selected Committers </h2>
           <div *ngFor="let item of selectedCommitters">
             {{item}}
@@ -218,8 +219,8 @@ asdasd-->
       </div>
 
       <div *ngFor="let item of chartData">
-      <p-chart width="600px" height="400px" type="bar" [data]="item" [options]="basicOptions"></p-chart>
-    </div>
+        <p-chart width="600px" height="400px" type="bar" [data]="item" [options]="basicOptions"></p-chart>
+      </div>
 
     </div>
 

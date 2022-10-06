@@ -21,6 +21,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { GroupProjectServices } from 'src/Services/GroupProjectServices';
 import {BreadcrumbModule} from 'primeng/breadcrumb';
 import {PaginatorModule} from 'primeng/paginator';
+import {SelectButtonModule} from 'primeng/selectbutton';
+import {ToastModule} from 'primeng/toast';
+
+
 
 
 
@@ -43,7 +47,9 @@ import {PaginatorModule} from 'primeng/paginator';
     BrowserAnimationsModule,
     GroupProjectServices,
     BreadcrumbModule,
-    PaginatorModule
+    PaginatorModule,
+    SelectButtonModule,
+    ToastModule
     
     
   ],

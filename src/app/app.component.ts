@@ -18,8 +18,10 @@ import { Subgroups } from './Subgroups';
 export class AppComponent {
   title = 'GitlabAPI';
 
-  basicData!: any ;
-  chartData!:any[];
+  secenek = [{ label: 'Projects' }, { label: 'Groups' }];
+
+  basicData!: any;
+  chartData!: any[];
 
   basicOptions!: any;
 
@@ -65,7 +67,6 @@ export class AppComponent {
   subgroupsBreadcrumb!: Set<Number>;
   subgroupsNames!: String;
 
-
   constructor(
     private committersService: CommittersServices,
     private groupProjectService: GroupProjectServices,
@@ -73,7 +74,7 @@ export class AppComponent {
   ) {}
 
   ngOnInit() {
-    
+    console.log(this.secenek);
     this.chartData = [];
     this.startDate = new Date();
     this.endDate = new Date();
@@ -93,15 +94,15 @@ export class AppComponent {
   }
 
   async getProjectDetails(projectId: any) {
+    this.project = [];
+    this.groupProjects = [];
     if (projectId == '') {
       this.messageService.add({
         severity: 'error',
         summary: 'Project ID',
         detail: 'No project ID selected',
+        life: 1500,
       });
-      setTimeout(() => {
-        this.messageService.clear();
-      }, 1500);
     } else {
       this.projectName = await this.committersService.getProjectsName(
         projectId
@@ -112,7 +113,6 @@ export class AppComponent {
       );
 
       this.project.forEach((element) => {
-        
         this.committers.add(element.committer_name);
       });
       if (this.committers.size != 0) {
@@ -165,7 +165,6 @@ export class AppComponent {
 
   changeRadioForProject() {
     this.projectOrGroup = true;
-    this.project = [];
   }
 
   changeRadioForGroup() {
@@ -196,6 +195,7 @@ export class AppComponent {
   }
 
   async createChart() {
+    this.chartData = [];
     if (this.withDate) {
       if (this.startDate != null && this.endDate != null) {
         this.project = [];
@@ -209,42 +209,35 @@ export class AppComponent {
           severity: 'error',
           summary: 'Date',
           detail: 'No date selected',
+          life: 1500,
         });
-        setTimeout(() => {
-          this.messageService.clear();
-        }, 1500);
       }
     }
 
-    if(!this.projectOrGroup){
-      
-    
-    this.selectedProjectsId.forEach(async element => {
-      
-      await this.createChartData(element);
-    await this.drawChart(element);
-    });
-  }else{
-    console.log("project", this.project);
-    
-    await this.createChartData();
-    await this.drawChart();
-  }
+    if (!this.projectOrGroup) {
+      this.selectedProjectsId.forEach(async (element) => {
+        await this.createChartData(element);
+        await this.drawChart(element);
+      });
+    } else {
+      console.log('project', this.project);
+
+      await this.createChartData();
+      await this.drawChart();
+    }
   }
 
-  async createChartData(data?:any) {
+  async createChartData(data?: any) {
     this.committersCount.clear();
     let count = 0;
-    
-    if(!this.projectOrGroup){
-      this.project = await this.committersService.getCommittersDetails(data);
 
+    if (!this.projectOrGroup) {
+      this.project = await this.committersService.getCommittersDetails(data);
     }
     this.selectedCommitters.forEach((element) => {
       count = 0;
-      
+
       this.project.forEach((elementCommitters) => {
-        
         if (elementCommitters.committer_name === element) {
           count++;
         }
@@ -253,7 +246,7 @@ export class AppComponent {
     });
   }
 
-  async drawChart(projectId?:any) {
+  async drawChart(projectId?: any) {
     let labelData = Array.from(this.committersCount.keys());
     let datasetsData = Array.from(this.committersCount.values());
 
@@ -264,9 +257,10 @@ export class AppComponent {
       backgroundColor.push('#000000'.slice(0, -color.length) + color);
     });
 
-    if(!this.projectOrGroup){
-      this.projectName = await this.committersService.getProjectsName(projectId);
-
+    if (!this.projectOrGroup) {
+      this.projectName = await this.committersService.getProjectsName(
+        projectId
+      );
     }
 
     this.basicData = {
@@ -280,10 +274,10 @@ export class AppComponent {
       ],
     };
     console.log(this.basicData);
-    
+
     this.chartData.push(this.basicData);
-    console.log("data",this.chartData);
-    
+    console.log('data', this.chartData);
+
     this.basicOptions = {
       plugins: {
         legend: {
@@ -314,7 +308,8 @@ export class AppComponent {
     this.showChartBool = true;
   }
 
-  async getGroupProject(groupId: any, e?:any) {
+  async getGroupProject(groupId: any, e?: any) {
+    this.showCommitters = false;
     this.subgroups = [];
     this.groupProjects = [];
     this.subgroupsPage = 1;
@@ -322,8 +317,8 @@ export class AppComponent {
     this.subgroupsGroupsLength = 0;
     this.groupProjectLength = 0;
     this.committers.clear();
-    
-    if(e!=null){
+
+    if (e != null) {
       this.subgroupsBreadcrumb.clear();
     }
 
@@ -332,19 +327,22 @@ export class AppComponent {
         severity: 'error',
         summary: 'Group ID',
         detail: 'No Group ID selected',
+        life: 1500,
       });
-
-      setTimeout(() => {
-        this.messageService.clear();
-      }, 1500);
     } else {
       this.subgroupsBreadcrumb.add(groupId);
       this.globalGroupId = groupId;
 
-      let projectsId = await this.groupProjectService.getGroups(groupId,1,10000);
-      projectsId.forEach(async element => {
-        let temp = await this.committersService.getCommittersDetails(element.id);
-        temp.forEach(element => {
+      let projectsId = await this.groupProjectService.getGroups(
+        groupId,
+        1,
+        10000
+      );
+      projectsId.forEach(async (element) => {
+        let temp = await this.committersService.getCommittersDetails(
+          element.id
+        );
+        temp.forEach((element) => {
           this.committers.add(element.committer_name);
         });
       });
@@ -398,7 +396,7 @@ export class AppComponent {
           1,
           20
         );
-          this.showProjectForGroup = true;
+        this.showProjectForGroup = true;
       } catch (error) {
         this.showGroupProjects = false;
         this.subgroupsBreadcrumb.clear();
@@ -406,24 +404,20 @@ export class AppComponent {
           severity: 'error',
           summary: 'Unexpected Error',
           detail: 'Please try again',
+          life: 1500,
         });
-
-        setTimeout(() => {
-          this.messageService.clear();
-        }, 1500);
       }
     }
   }
 
-  async changeSelectedProjects(e: any,id:any) {
+  async changeSelectedProjects(e: any, id: any) {
     if (!this.selectedProjects.has(e)) {
       this.selectedProjects.add(e);
       this.selectedProjectsId.add(id);
     } else {
       this.selectedProjects.delete(e);
       this.selectedProjectsId.delete(id);
-
-    }    
+    }
   }
 
   async getSubgroups(groupId: any) {

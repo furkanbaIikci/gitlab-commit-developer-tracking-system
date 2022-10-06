@@ -19,6 +19,7 @@
     "@angular/platform-browser-dynamic": "^14.1.0",
     "@angular/router": "^14.1.0",
     "bootstrap": "^5.2.1",
+    "bootstrap-icons": "^1.9.1",
     "chart.js": "^3.9.1",
     "primeicons": "^5.0.0",
     "primeng": "^14.0.2",
